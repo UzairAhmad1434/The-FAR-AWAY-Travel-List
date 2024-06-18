@@ -2,20 +2,7 @@ import "./App.css";
 import { useState } from "react";
 
 function App() {
-  const initialItems = [
-    { id: 1, description: "Shoes", quantity: 2, packed: false },
-    { id: 2, description: "Passports", quantity: 1, packed: true },
-    { id: 3, description: "Socks", quantity: 3, packed: false },
-    { id: 4, description: "Shoes", quantity: 2, packed: false },
-    { id: 5, description: "Passports", quantity: 1, packed: true },
-    { id: 6, description: "Socks", quantity: 3, packed: false },
-    { id: 7, description: "Shoes", quantity: 2, packed: false },
-    { id: 8, description: "Passports", quantity: 1, packed: true },
-    { id: 9, description: "Socks", quantity: 3, packed: false },
-    { id: 10, description: "Shoes", quantity: 2, packed: false },
-    { id: 11, description: "Passports", quantity: 1, packed: true },
-    { id: 12, description: "Socks", quantity: 3, packed: false },
-  ];
+  const initialItems = [];
 
   const [items, setItems] = useState(initialItems);
 
@@ -39,9 +26,32 @@ function Logo() {
 
 function Form() {
   return (
-    <h3 className="p-2 font-quicksand bg-orange-700 text-2xl text-center">
-      What you need for your 😍 trip?
-    </h3>
+    <div className="p-4  font-quicksand bg-orange-700 flex flex-col gap-4 justify-center items-center w-full  mx-auto">
+      <h3 className="p-4 lg:text-2xl md:text-xl sm:text-md text-center">
+        What you need for your 😍 trip?
+      </h3>
+      <input
+        className="p-2 lg:w-48 md:w-36 sm:w-48 w-full h-12 rounded-md text-xl font-medium"
+        type="text"
+        name="text"
+        id="text-id"
+        placeholder="Item description"
+      />
+      <input
+        className="p-2 lg:w-48 md:w-36 sm:w-48 w-full h-12 rounded-md text-xl font-medium"
+        type="number"
+        name="quantity"
+        id="quantity-id"
+        min="1"
+        placeholder="Quantity"
+      />
+      <button
+        type="submit"
+        className="p-2 mt-4 bg-yellow-500 text-xl rounded-md w-full lg:w-48 md:w-36 sm:w-48"
+      >
+        Add Item
+      </button>
+    </div>
   );
 }
 
@@ -72,7 +82,7 @@ function Footer({ items }) {
   const packedPercentage = (packedItems / totalItems) * 100;
 
   return (
-    <footer className="fixed bottom-0 bg-blue-300 p-8 text-xl text-center w-full">
+    <footer className="fixed bottom-0 bg-blue-300 p-4 text-center w-full flex flex-col md:flex-row md:justify-between items-center text-xl">
       💼 You have {totalItems} items in your list and you packed {packedItems}{" "}
       items ({packedPercentage.toFixed(2)}%)
     </footer>
