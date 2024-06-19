@@ -17,11 +17,28 @@ function App() {
     };
     setItems((prevItems) => [...prevItems, newItem]);
   };
+
+  const handleTogglePacked = (id) => {
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, packed: !item.packed } : item
+      )
+    );
+  };
+
+  const handleDeleteItem = (id) => {
+    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  };
+
   return (
     <>
       <Logo />
       <Form onAddItem={handleAddItem} />
-      <PackingList items={items} />
+      <PackingList
+        items={items}
+        onTogglePacked={handleTogglePacked}
+        onDeleteItem={handleDeleteItem}
+      />
       <Footer items={items} />
     </>
   );
@@ -47,10 +64,11 @@ function Form({ onAddItem }) {
       setQuantity(1);
     }
   };
+
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-4  font-quicksand bg-orange-700 flex flex-col gap-4 justify-center items-center w-full  mx-auto"
+      className="p-4 font-quicksand bg-orange-700 flex flex-col gap-4 justify-center items-center w-full mx-auto"
     >
       <h3 className="p-4 lg:text-2xl md:text-xl sm:text-md text-center">
         What you need for your 😍 trip?
@@ -84,23 +102,34 @@ function Form({ onAddItem }) {
   );
 }
 
-function PackingList({ items }) {
+function PackingList({ items, onTogglePacked, onDeleteItem }) {
   return (
-    <div className="p-12 ">
-      <ul className="text-white  text-xl pb-12  gap-y-10 flex flex-wrap">
+    <div className="p-12">
+      <ul className="text-white text-xl pb-12 gap-y-10 flex flex-wrap">
         {items.map((item) => (
-          <Item key={item.id} item={item} />
+          <Item
+            key={item.id}
+            item={item}
+            onTogglePacked={onTogglePacked}
+            onDeleteItem={onDeleteItem}
+          />
         ))}
       </ul>
     </div>
   );
 }
 
-function Item({ item }) {
+function Item({ item, onTogglePacked, onDeleteItem }) {
   return (
-    <li className="md:w-1/3 w-full text-center">
+    <li
+      className="md:w-1/3 w-full text-center cursor-pointer"
+      style={{ textDecoration: item.packed ? "line-through" : "none" }}
+      onClick={() => onTogglePacked(item.id)}
+    >
       {item.quantity} {item.description}
-      <button>❌</button>
+      <button className="ml-2" onClick={() => onDeleteItem(item.id)}>
+        ❌
+      </button>
     </li>
   );
 }
