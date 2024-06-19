@@ -2,14 +2,25 @@ import "./App.css";
 import { useState } from "react";
 
 function App() {
-  const initialItems = [];
+  const initialItems = [
+    { id: 1, description: "socks", quantity: 3, packed: false },
+  ];
 
   const [items, setItems] = useState(initialItems);
 
+  const handleAddItem = (description, quantity) => {
+    const newItem = {
+      id: items.length + 1,
+      description,
+      quantity: parseInt(quantity),
+      packed: false,
+    };
+    setItems((prevItems) => [...prevItems, newItem]);
+  };
   return (
     <>
       <Logo />
-      <Form />
+      <Form onAddItem={handleAddItem} />
       <PackingList items={items} />
       <Footer items={items} />
     </>
@@ -24,9 +35,23 @@ function Logo() {
   );
 }
 
-function Form() {
+function Form({ onAddItem }) {
+  const [description, setDescription] = useState("");
+  const [quantity, setQuantity] = useState(1);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (description.trim() && quantity > 0) {
+      onAddItem(description, quantity);
+      setDescription("");
+      setQuantity(1);
+    }
+  };
   return (
-    <div className="p-4  font-quicksand bg-orange-700 flex flex-col gap-4 justify-center items-center w-full  mx-auto">
+    <form
+      onSubmit={handleSubmit}
+      className="p-4  font-quicksand bg-orange-700 flex flex-col gap-4 justify-center items-center w-full  mx-auto"
+    >
       <h3 className="p-4 lg:text-2xl md:text-xl sm:text-md text-center">
         What you need for your 😍 trip?
       </h3>
@@ -35,6 +60,8 @@ function Form() {
         type="text"
         name="text"
         id="text-id"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
         placeholder="Item description"
       />
       <input
@@ -42,6 +69,8 @@ function Form() {
         type="number"
         name="quantity"
         id="quantity-id"
+        value={quantity}
+        onChange={(e) => setQuantity(e.target.value)}
         min="1"
         placeholder="Quantity"
       />
@@ -51,14 +80,14 @@ function Form() {
       >
         Add Item
       </button>
-    </div>
+    </form>
   );
 }
 
 function PackingList({ items }) {
   return (
     <div className="p-12 ">
-      <ul className="text-white  text-xl p-8 border-2 gap-y-10 flex flex-wrap">
+      <ul className="text-white  text-xl pb-12  gap-y-10 flex flex-wrap">
         {items.map((item) => (
           <Item key={item.id} item={item} />
         ))}
@@ -82,7 +111,7 @@ function Footer({ items }) {
   const packedPercentage = (packedItems / totalItems) * 100;
 
   return (
-    <footer className="fixed bottom-0 bg-blue-300 p-4 text-center w-full flex flex-col md:flex-row md:justify-between items-center text-xl">
+    <footer className="fixed bottom-0 bg-blue-300 p-4 text-center w-full text-xl">
       💼 You have {totalItems} items in your list and you packed {packedItems}{" "}
       items ({packedPercentage.toFixed(2)}%)
     </footer>
